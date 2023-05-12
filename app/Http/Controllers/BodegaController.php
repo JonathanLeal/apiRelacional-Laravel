@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Helpers\Http;
 use App\Models\Bodega;
 use App\Models\Producto;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
