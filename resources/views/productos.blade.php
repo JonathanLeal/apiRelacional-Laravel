@@ -8,48 +8,53 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script defer>
         //guardar producto
-        function guardarProducto() {
-            const nombre_pro = this.nombre_pro;
-            const cantidad = this.cantidad;
-            const precio = this.precio;
 
-            axios.post('http://127.0.0.1:8000/api/productos/save', {
-                nombre_pro,
-                cantidad,
-                precio
-            })
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.log(error.response.data);
-            });
-        }
-
-        function obtenerProductos() {
+        function data () {
             return {
+                nombre_pro: '',
+                cantidad: '',
+                precio: '',
                 productos: [],
                 init: async function(){
-                    this.productos = await axios.get('http://127.0.0.1:8000/api/productos/list')
-                    .then(response => {
-                        console.log(response.data);
-                        return response.data;
-                    }).catch(error => console.log(error));
+                    this.obtenerProductos();
                 },
-                editarProducto(id_producto){
+                editarProducto: async function (id_productos) {
                     //llenar para editar
                 },
 
                 eliminarProducto(id_productos){
 
                 },
+                guardarProducto: async function () {
+                    const data = {
+                        nombre_pro: this.nombre_pro,
+                        cantidad: this.cantidad,
+                        precio: this.precio
+                    }
+
+                    axios.post('http://127.0.0.1:8000/api/productos/save', data)
+                    .then(response => {
+                        console.log(response.data);
+                        this.obtenerProductos();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+                },
+                obtenerProductos: async function () {
+                    this.productos = await axios.get('http://127.0.0.1:8000/api/productos/list')
+                    .then(response => {
+                        console.log(response.data);
+                        return response.data.datos;
+                    }).catch(error => console.log(error))
+                }
             }
         }
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js"></script>
     <title>Productos</title>
 </head>
-<body>
+<body x-data="data">
     <div class="container-fluid">
         <div class="row mt-3">
             <div class="col-md-4 offset-md-4">
@@ -73,8 +78,8 @@
                                 <th class="text-center">ACCIONES</th>
                             </tr>
                         </thead>
-                        <tbody x-data='obtenerProductos()'>
-                            <template x-for='(producto,index) in productos.datos' :key='index'>
+                        <tbody>
+                            <template x-for='(producto,index) in productos' :key='index'>
                                 <tr>
                                     <td class="text-center" x-text="producto.id_productos"></td>
                                     <td class="text-center" x-text="producto.nombre_pro"></td>
