@@ -19,10 +19,14 @@
                     this.obtenerProductos();
                 },
                 editarProducto: async function (id_productos) {
-                    //llenar para editar
+                    this.productos = axios.get('http://localhost:8000/api/productos/list/'+id_productos)
+                    .then(response => {
+                        console.log(response.data);
+                    })
+                    .catch(error => console.log(error))
                 },
 
-                eliminarProducto(id_productos){
+                eliminarProducto: async function (id_productos){
 
                 },
                 guardarProducto: async function () {
@@ -86,7 +90,7 @@
                                     <td class="text-center" x-text="producto.cantidad"></td>
                                     <td class="text-center" x-text="producto.precio"></td>
                                     <td class="text-center">
-                                        <button class="btn btn-info" @click="editarProducto(producto.id_productos)">Editar</button>
+                                        <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalProductos" @click="editarProducto(producto.id_productos)">Editar</button>
                                         <button class="btn btn-danger" @click="eliminarProducto(producto.id_productos)">Eliminar</button>
                                     </td>
                                 </tr>
